@@ -12,6 +12,7 @@
     <!-- Bootstrap core CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Favicons -->
     <meta name="theme-color" content="#7952b3">
@@ -45,7 +46,8 @@
     <header class="blog-header py-3">
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
-                <a class="link-secondary" href="#">Panier <span class="badge bg-secondary">{{ Cart::count() }}</span></a>
+                <a class="link-secondary" href="{{ route('cart.index') }}">Panier <span
+                        class="badge bg-secondary">{{ Cart::count() }}</span></a>
             </div>
             <div class="col-4 text-center">
                 <a class="blog-header-logo text-dark" href="{{ route('product.index') }}">E-Commerce</a>
@@ -88,15 +90,16 @@
             {{ session('success') }}
         </div>
     @endif
-    <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-        <div class="col-md-6 px-0">
-            <h1 class="display-4 font-italic">Application E-commerce</h1>
-            <p class="lead my-3">
-                Retrouver ce que vous cherchez
-            </p>
-
+    @section('jumbotrom')
+        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
+            <div class="col-md-6 px-0">
+                <h1 class="display-4 font-italic">Application E-commerce</h1>
+                <p class="lead my-3">
+                    Retrouver ce que vous cherchez
+                </p>
+            </div>
         </div>
-    </div>
+    @show
 
     @yield('contenus')
 

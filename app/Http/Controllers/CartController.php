@@ -15,7 +15,7 @@ class CartController extends Controller
      */
     public function index()
     {
-        //
+       return view('cart.index');
     }
 
     /**
@@ -31,21 +31,30 @@ class CartController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        Cart::add($request->id,$request->title,1,$request->price)
-        ->associate(Product::class);
+        $duplicata = Cart::search(function ($carItem, $rowId) use ($request) {
+            return $carItem->id == $request->product_id;
+        });
 
-        return redirect()->route('product.index')->with('success','le produit a bien ete ajouter');
+        if ($duplicata->isNotEmpty()) {
+            return redirect()->route('product.index')->with('success', 'le produit a deja ete ajouter');
+        }
+
+        $product = Product::find($request->product_id);
+        Cart::add($product->id, $product->title, 1, $product->price)
+            ->associate(Product::class);
+
+        return redirect()->route('product.index')->with('success', 'le produit a bien ete ajouter');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -56,7 +65,7 @@ class CartController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -67,8 +76,8 @@ class CartController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -79,11 +88,13 @@ class CartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($rowId)
     {
-        //
+        Cart::remove($rowId);
+
+        return back()->with('success','le produit a été supprimé.');
     }
 }

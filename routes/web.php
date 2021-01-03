@@ -20,7 +20,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('/',['App\Http\Controllers\ProductController','index'])->name('product.index');
 Route::get('/boutique/{slug}',['App\Http\Controllers\ProductController','show'])->name('product.show');
 
+
+/* Cart Route */
 Route::post('/panier/ajouter',['App\Http\Controllers\CartController','store'])->name('cart.store');
+Route::get('/panier',['App\Http\Controllers\CartController','index'])->name('cart.index');
+Route::delete('/panier/{id}',['App\Http\Controllers\CartController','destroy'])->name('cart.destroy');
+
+Route::get('/videpanier',function (){
+    \Gloudemans\Shoppingcart\Facades\Cart::destroy();
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
